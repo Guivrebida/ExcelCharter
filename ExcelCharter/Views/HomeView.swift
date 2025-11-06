@@ -21,7 +21,7 @@ struct HomeView: View {
     
     // MARK: - Body
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             List {
                 ForEach(sheetfiles) { sheetfile in
                     NavigationLink {
@@ -36,7 +36,7 @@ struct HomeView: View {
             .navigationTitle("Home")
             .listStyle(.plain)
         }
-        HStack{
+        HStack {
             ///Search and Add buttons
             Button(action: {
                 //logic
@@ -48,6 +48,7 @@ struct HomeView: View {
                     .frame(width: 20, height: 22)
             }
             .buttonStyle(.borderedProminent)
+            .shadow(radius: 5)
             .tint(.gray)
             
         
@@ -55,6 +56,7 @@ struct HomeView: View {
                 showNewFileView = true
             }
             .buttonStyle(.borderedProminent)
+            .shadow(radius: 5)
             .bold()
         }
         .sheet(isPresented: $showNewFileView) {
