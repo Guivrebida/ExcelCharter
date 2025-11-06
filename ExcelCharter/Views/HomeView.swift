@@ -11,6 +11,7 @@ struct HomeView: View {
     // MARK: - Properties
     private class FileReference { }
     
+    ///Array of test files
     let sheetfiles = [
             SheetFile(id: UUID(), title: "Sheet 1"),
             SheetFile(id: UUID(), title: "Sheet 2"),
@@ -34,12 +35,27 @@ struct HomeView: View {
             .navigationTitle("Home")
             .listStyle(.plain)
         }
-
-        Button("Add File") {
-            //temporarily empty
+        HStack{
+            ///Search and Add buttons
+            Button(action: {
+                //logic
+                print("search button tapped")
+            })
+            {
+                Image(systemName: "magnifyingglass")
+                    .resizable()
+                    .frame(width: 20, height: 22)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(.gray)
+            
+        
+            Button("Add File") {
+                //logic
+            }
+            .buttonStyle(.borderedProminent)
+            .bold()
         }
-        .font(.title3)
-        .bold()
     }
 }
 // MARK: - Preview
