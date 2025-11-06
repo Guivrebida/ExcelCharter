@@ -31,9 +31,8 @@ struct HomeView: View {
                     }
                 }
             }
+            .navigationTitle("Home")
         }
-        .navigationTitle("Home")
-        .listStyle(.plain)
     }
 }
 // MARK: - Preview
