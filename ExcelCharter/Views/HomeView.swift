@@ -32,7 +32,14 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Home")
+            .listStyle(.plain)
         }
+
+        Button("Add File") {
+            //temporarily empty
+        }
+        .font(.title3)
+        .bold()
     }
 }
 // MARK: - Preview
