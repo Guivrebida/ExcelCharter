@@ -32,14 +32,6 @@ struct NewFileView: View {
                     .disableAutocorrection(true)
                     .textFieldStyle(.roundedBorder)
                     .padding()
-                HStack {
-                    ///This HStack is temporary.
-                    Text("File will be saved as: ")
-                        .padding([.trailing], 130)
-                    
-                    Text("\(newFileName).csv")
-                        .foregroundColor(newFileFieldIsFocused ? .blue : .gray)
-                }
                 
                 Spacer()
                 
