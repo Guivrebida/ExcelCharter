@@ -20,6 +20,7 @@ struct ChartConfigurationView: View {
     @State private var viewModel = ChartViewModel()
     @State private var showChart = false
     @State private var showCustomization = false
+    @State private var showDataFilter = false
     @State private var chartName = ""
     
     // Customization properties
@@ -180,6 +181,26 @@ struct ChartConfigurationView: View {
                                     .foregroundStyle(.secondary)
                             }
                         }
+                        
+                        Button {
+                            showDataFilter = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "line.3.horizontal.decrease.circle.fill")
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Filter Data Rows")
+                                    if !viewModel.excludedRowIndices.isEmpty {
+                                        Text("\(viewModel.excludedRowIndices.count) row\(viewModel.excludedRowIndices.count == 1 ? "" : "s") excluded")
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
+                                    }
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
                 
@@ -239,6 +260,7 @@ struct ChartConfigurationView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .buttonStyle(.plain)
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
@@ -246,7 +268,7 @@ struct ChartConfigurationView: View {
                         saveChart()
                     }
                     .disabled(!viewModel.isDataValid || chartName.trimmingCharacters(in: .whitespaces).isEmpty)
-                    .bold()
+                    .buttonStyle(.plain)
                 }
             }
             .onAppear {
@@ -266,6 +288,17 @@ struct ChartConfigurationView: View {
                         ? viewModel.columnNames[viewModel.yAxisColumn]
                         : "Y"
                 )
+            }
+            .sheet(isPresented: $showDataFilter) {
+                DataFilterView(
+                    data: sheetFile.data ?? [],
+                    xAxisColumn: viewModel.xAxisColumn,
+                    yAxisColumn: viewModel.yAxisColumn,
+                    excludedRowIndices: $viewModel.excludedRowIndices
+                )
+            }
+            .onChange(of: viewModel.excludedRowIndices) { _, _ in
+                validateData()
             }
         }
     }
@@ -287,6 +320,11 @@ struct ChartConfigurationView: View {
             showGridLines = config.showGridLines
             customXAxisLabel = config.xAxisLabel ?? ""
             customYAxisLabel = config.yAxisLabel ?? ""
+            
+            // Load excluded rows
+            if let excludedRows = config.excludedRowIndices {
+                viewModel.excludedRowIndices = Set(excludedRows)
+            }
         } else {
             // Generate default name for new chart
             chartName = "\(viewModel.chartType.rawValue) - \(Date().formatted(date: .abbreviated, time: .omitted))"
@@ -314,6 +352,7 @@ struct ChartConfigurationView: View {
             existing.showGridLines = showGridLines
             existing.xAxisLabel = customXAxisLabel.isEmpty ? nil : customXAxisLabel
             existing.yAxisLabel = customYAxisLabel.isEmpty ? nil : customYAxisLabel
+            existing.excludedRowIndices = viewModel.excludedRowIndices.isEmpty ? nil : Array(viewModel.excludedRowIndices)
         } else {
             // Create new configuration
             config = ChartConfiguration(
@@ -325,7 +364,8 @@ struct ChartConfigurationView: View {
                 showLegend: showLegend,
                 showGridLines: showGridLines,
                 xAxisLabel: customXAxisLabel.isEmpty ? nil : customXAxisLabel,
-                yAxisLabel: customYAxisLabel.isEmpty ? nil : customYAxisLabel
+                yAxisLabel: customYAxisLabel.isEmpty ? nil : customYAxisLabel,
+                excludedRowIndices: viewModel.excludedRowIndices.isEmpty ? nil : Array(viewModel.excludedRowIndices)
             )
             config.sheetFile = sheetFile
             modelContext.insert(config)

@@ -17,6 +17,9 @@ class ChartViewModel {
     var errorMessage: String?
     var isDataValid: Bool = false
     
+    // Data filtering properties
+    var excludedRowIndices: Set<Int> = []
+    
     private(set) var columnTypes: [ColumnType] = []
     private(set) var columnNames: [String] = []
     private(set) var availableDataRange: Range<Int>?
@@ -119,6 +122,11 @@ class ChartViewModel {
         
         // Skip header row (index 0)
         for rowIndex in 1..<data.count {
+            // Skip excluded rows
+            if excludedRowIndices.contains(rowIndex) {
+                continue
+            }
+            
             let row = data[rowIndex]
             
             // Ensure row has enough columns
@@ -296,7 +304,7 @@ class ChartViewModel {
 
 // MARK: - Supporting Types
 
-enum ChartType: String, CaseIterable, Identifiable {
+enum ChartType: String, CaseIterable, Identifiable, Codable {
     case bar = "Bar Chart"
     case line = "Line Chart"
     case point = "Scatter Plot"

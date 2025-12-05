@@ -24,6 +24,10 @@ class ChartConfiguration {
     var xAxisLabel: String?
     var yAxisLabel: String?
     
+    // Data filtering properties
+    var excludedRowIndices: [Int]? // Row indices to exclude (1-based, excluding header)
+    var includedColumns: [Int]? // Specific columns to include (nil means all)
+    
     // Relationship to SheetFile
     var sheetFile: SheetFile?
     
@@ -37,7 +41,9 @@ class ChartConfiguration {
         showLegend: Bool = true,
         showGridLines: Bool = true,
         xAxisLabel: String? = nil,
-        yAxisLabel: String? = nil
+        yAxisLabel: String? = nil,
+        excludedRowIndices: [Int]? = nil,
+        includedColumns: [Int]? = nil
     ) {
         self.id = id
         self.name = name
@@ -50,6 +56,8 @@ class ChartConfiguration {
         self.showGridLines = showGridLines
         self.xAxisLabel = xAxisLabel
         self.yAxisLabel = yAxisLabel
+        self.excludedRowIndices = excludedRowIndices
+        self.includedColumns = includedColumns
     }
     
     // Helper to convert back to ChartType enum

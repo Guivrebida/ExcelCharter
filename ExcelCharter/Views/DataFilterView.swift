@@ -2,7 +2,7 @@
 //  DataFilterView.swift
 //  ExcelCharter
 //
-//  View for selecting which rows to include/exclude from chart
+//  Created by Paradis d'Abbadon on 05.12.25.
 //
 
 import SwiftUI
@@ -21,7 +21,7 @@ struct DataFilterView: View {
     }
     
     var dataRows: [(index: Int, row: [String])] {
-        Array(data.enumerated().dropFirst()) // Skip header
+        Array(data.enumerated().dropFirst().map { (index: $0.offset, row: $0.element) })
     }
     
     var selectedCount: Int {
@@ -88,7 +88,6 @@ struct DataFilterView: View {
                         dismiss()
                     }
                     .buttonStyle(.plain)
-                    .bold()
                 }
             }
             .onAppear {

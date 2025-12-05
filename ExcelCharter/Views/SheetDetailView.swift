@@ -130,6 +130,17 @@ struct SheetDetailView: View {
         }
         .navigationTitle(sheetFile.title)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showChartConfig = true
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.system(size: 16, weight: .semibold))
+                }
+                .buttonStyle(.plain)
+            }
+        }
         .sheet(isPresented: $showChartConfig) {
             ChartConfigurationView(sheetFile: sheetFile)
         }

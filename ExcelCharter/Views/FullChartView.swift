@@ -98,9 +98,12 @@ struct FullChartView: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "chevron.left")
+                                .font(.system(size: 14, weight: .semibold))
                             Text("Back")
+                                .font(.system(size: 16))
                         }
                     }
+                    .buttonStyle(.plain)
                 }
                 
                 // Direct share button
@@ -109,7 +112,9 @@ struct FullChartView: View {
                         shareChart()
                     } label: {
                         Image(systemName: "square.and.arrow.up")
+                            .font(.system(size: 16))
                     }
+                    .buttonStyle(.plain)
                     .disabled(isExporting)
                 }
                 
@@ -137,7 +142,9 @@ struct FullChartView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
+                            .font(.system(size: 16))
                     }
+                    .buttonStyle(.plain)
                     .disabled(isExporting)
                 }
             }
@@ -261,6 +268,12 @@ struct FullChartView: View {
         viewModel.chartType = chartConfig.chartTypeEnum
         viewModel.xAxisColumn = chartConfig.xAxisColumn
         viewModel.yAxisColumn = chartConfig.yAxisColumn
+        
+        // Load excluded rows from config
+        if let excludedRows = chartConfig.excludedRowIndices {
+            viewModel.excludedRowIndices = Set(excludedRows)
+        }
+        
         _ = viewModel.validateSelection(data: data)
     }
     
